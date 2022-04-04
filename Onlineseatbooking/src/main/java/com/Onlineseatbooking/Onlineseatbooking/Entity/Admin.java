@@ -6,6 +6,8 @@ import javax.persistence.Table;
 
 import com.Onlineseatbooking.Onlineseatbooking.model.User;
 
+import lombok.Data;
+@Data
 @Entity
 @Table(name="Admin")
 public class Admin extends User {
