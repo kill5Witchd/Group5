@@ -2,6 +2,7 @@ package com.Onlineseatbooking.Onlineseatbooking.controller;
 
 import com.Onlineseatbooking.Onlineseatbooking.DTO.LoginDto;
 import com.Onlineseatbooking.Onlineseatbooking.DTO.SignUpDto;
+import com.Onlineseatbooking.Onlineseatbooking.NoAccessException;
 import com.Onlineseatbooking.Onlineseatbooking.ResourceNotFoundException;
 import com.Onlineseatbooking.Onlineseatbooking.model.Role;
 import com.Onlineseatbooking.Onlineseatbooking.model.User;
@@ -20,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import com.Onlineseatbooking.Onlineseatbooking.NoAccessException;
 
 import java.util.Collections;
 import java.util.List;
@@ -53,12 +55,10 @@ public class AuthController {
 
     //Register/SignUp REST API
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto) {
+    public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto) throws NoAccessException{
 
         // add check for username exists in a DB
-        if (userRepository.existsByUsername(signUpDto.getUsername())) {
-            return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
-        }
+        if (userRepository.existsByUsername(signUpDto.getUsername())) {throw new NoAccessException("Username already taken");}
 
         // add check for email exists in DB
         if (userRepository.existsByEmail(signUpDto.getEmail())) {
@@ -122,50 +122,51 @@ public class AuthController {
 //        return "Update Success";
 //    }
 
-    @GetMapping("/user")
-    public List<User> get() {
-        return userRepository.findAll();
-    }
-
-    @PostMapping("/user")
-    public User save(@RequestBody User new_user) {
-        return userRepository.save(new_user);
-    }
-
-    @GetMapping("/user/{id}")
-    public User get(@PathVariable long id) {
-        Optional<User> new_user = userRepository.findById(id);
-        if (new_user.isPresent()) {
-            return new_user.get();
-        } else {
-            throw new RuntimeException("User not found for the id " + id);
-        }
-    }
-
-
-    @PutMapping("/user/{id}")
-    public User update(@RequestBody User new_user) {
-        return userRepository.save(new_user);
-    }
-
-    @DeleteMapping("/user/{id}")
-    public String delete(@PathVariable long id) {
-        Optional<User> new_user = userRepository.findById(id);
-        if (new_user.isPresent()) {
-            userRepository.delete(new_user.get());
-            return "User is deleted with id " + id;
-        } else {
-            throw new RuntimeException("User not found for the id " + id);
-        }
-    }
-
-    @PostMapping("/edit/{id}")
-    public String update_User(User new_user, BindingResult bindingResult, @PathVariable("id") Long userId, Model model) throws ResourceNotFoundException {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(new_user.getPassword());
-        new_user.setPassword(encodedPassword);
-        userRepository.save(new_user);
-
-        return "Password Updated";
-    }
+    //////
+//    @GetMapping("/user")
+//    public List<User> get() {
+//        return userRepository.findAll();
+//    }
+//
+//    @PostMapping("/user")
+//    public User save(@RequestBody User new_user) {
+//        return userRepository.save(new_user);
+//    }
+//
+//    @GetMapping("/user/{id}")
+//    public User get(@PathVariable long id) {
+//        Optional<User> new_user = userRepository.findById(id);
+//        if (new_user.isPresent()) {
+//            return new_user.get();
+//        } else {
+//            throw new RuntimeException("User not found for the id " + id);
+//        }
+//    }
+//
+//
+//    @PutMapping("/user/{id}")
+//    public User update(@RequestBody User new_user) {
+//        return userRepository.save(new_user);
+//    }
+//
+//    @DeleteMapping("/user/{id}")
+//    public String delete(@PathVariable long id) {
+//        Optional<User> new_user = userRepository.findById(id);
+//        if (new_user.isPresent()) {
+//            userRepository.delete(new_user.get());
+//            return "User is deleted with id " + id;
+//        } else {
+//            throw new RuntimeException("User not found for the id " + id);
+//        }
+//    }
+//
+//    @PostMapping("/edit/{id}")
+//    public String update_User(User new_user, BindingResult bindingResult, @PathVariable("id") Long userId, Model model) throws ResourceNotFoundException {
+//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//        String encodedPassword = passwordEncoder.encode(new_user.getPassword());
+//        new_user.setPassword(encodedPassword);
+//        userRepository.save(new_user);
+//
+//        return "Password Updated";
+//    }
 }
