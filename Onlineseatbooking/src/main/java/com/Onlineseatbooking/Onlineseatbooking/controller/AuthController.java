@@ -1,5 +1,5 @@
 package com.Onlineseatbooking.Onlineseatbooking.controller;
-
+import com.Onlineseatbooking.Onlineseatbooking.Exceptions.UserNameOrEmailAlreadyTakenException;
 import com.Onlineseatbooking.Onlineseatbooking.DTO.LoginDto;
 import com.Onlineseatbooking.Onlineseatbooking.DTO.SignUpDto;
 import com.Onlineseatbooking.Onlineseatbooking.model.Role;
@@ -47,16 +47,17 @@ public class AuthController {
 
     //Register/SignUp REST API
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto){
-
+    public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto) throws UserNameOrEmailAlreadyTakenException{
         // add check for username exists in a DB
-        if(userRepository.existsByUsername(signUpDto.getUsername())){
-            return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
+        if (userRepository.existsByUsername(signUpDto.getUsername())) {
+            throw new UserNameOrEmailAlreadyTakenException("Username already taken");
         }
 
         // add check for email exists in DB
         if(userRepository.existsByEmail(signUpDto.getEmail())){
-            return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
+
+            throw new UserNameOrEmailAlreadyTakenException("Username already taken");
+            //return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
         }
 
         // create user object
@@ -74,10 +75,7 @@ public class AuthController {
         return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
 
     }
-//    @GetMapping("/get")
-//    public List<User> getDetails() {
-//        return this.userRepository.findAll();
-//    }
+
 
 
 }
