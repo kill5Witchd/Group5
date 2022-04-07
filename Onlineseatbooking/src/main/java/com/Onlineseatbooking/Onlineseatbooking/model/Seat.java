@@ -12,7 +12,10 @@ import javax.persistence.*;
 public class Seat {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name="booking_id")
+    private Integer bookingId;
+
     @Column(name="seat_id")
     private Integer seatId;
 
@@ -20,6 +23,7 @@ public class Seat {
 
     @Column(name="booking_date")
     private Date bookingDate;
+
 
     @Column(name="source_floor")
     private Integer sourcefloor;
@@ -48,13 +52,14 @@ public class Seat {
     public void setSourceFloor(Integer sourcefloor) {
         this.sourcefloor = sourcefloor;
     }
+    public String getEmail() {
+        return email;
+    }
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getEmail() {
-        return email;
-    }
+
 
 
     @Override
@@ -63,9 +68,9 @@ public class Seat {
                 + ", sourcefloor=" + sourcefloor + " , email=" + email +"]";
     }
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "seat_id", referencedColumnName = "seat_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Set<Role> roles;
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinTable(name = "user_roles",
+//            joinColumns = @JoinColumn(name = "seat_id", referencedColumnName = "seat_id"),
+//            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+//    private Set<Role> roles;
 }

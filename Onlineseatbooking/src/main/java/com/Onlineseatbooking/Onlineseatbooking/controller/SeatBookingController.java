@@ -23,22 +23,22 @@ public class SeatBookingController {
     private RoleRepository roleRepository;
 
     @PostMapping(value="/create")
-    public ResponseEntity<?> createSeat(@RequestBody SeatDto seatDto){
-       // return seatBookingService.createSeat(seat);
-        Seat seat = new Seat();
-        seat.setSeatId(seatDto.getSeatId());
-        seat.setBookingDate(seatDto.getBookingDate());
-        seat.setSourceFloor(seatDto.getSourcefloor());
-        seat.setEmail(seatDto.getEmail());
-
-        Role roles = roleRepository.findByName("ROLE_USER").get();
-        seat.setRoles(Collections.singleton(roles));
-
-        seatBookingService.save(seat);
-
-        return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
-
-    }
+   public Seat createSeat(@RequestBody Seat seat){
+        return seatBookingService.createSeat(seat);
+//        Seat seat = new Seat();
+//        seat.setSeatId(seatDto.getSeatId());
+//        seat.setBookingDate(seatDto.getBookingDate());
+//        seat.setSourceFloor(seatDto.getSourcefloor());
+//        seat.setEmail(seatDto.getEmail());
+//
+//        Role roles = roleRepository.findByName("ROLE_USER").get();
+//        seat.setRoles(Collections.singleton(roles));
+//
+//        seatBookingService.save(seat);
+//
+//        return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
+//
+   }
 
     @GetMapping(value="/seat/{seatId}")
     //@RequestMapping(value="/ticket/{ticketId}")
